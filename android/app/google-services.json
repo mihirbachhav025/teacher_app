@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "1094715114515",
+    "firebase_url": "https://attendance-app-b667e-default-rtdb.firebaseio.com",
+    "project_id": "attendance-app-b667e",
+    "storage_bucket": "attendance-app-b667e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094715114515:android:6e988168ea0b9844f92be6",
+        "android_client_info": {
+          "package_name": "com.example.student_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1094715114515-psnsr4tivccdbjtsa76qeo4if2deqn7p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvAWVnh8BuwtEsfrnh6XSr9xKbOpxz9UM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1094715114515-psnsr4tivccdbjtsa76qeo4if2deqn7p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1094715114515-v63n4r8rkf6f6ucj1a73lam0sctdm3u0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.studentApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094715114515:android:738164a4cbc7da5df92be6",
+        "android_client_info": {
+          "package_name": "com.example.teacher_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1094715114515-psnsr4tivccdbjtsa76qeo4if2deqn7p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvAWVnh8BuwtEsfrnh6XSr9xKbOpxz9UM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1094715114515-psnsr4tivccdbjtsa76qeo4if2deqn7p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1094715114515-v63n4r8rkf6f6ucj1a73lam0sctdm3u0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.studentApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

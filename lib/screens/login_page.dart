@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:teacher_app/view/teacher_home_page.dart';
+import 'package:teacher_app/screens/teacher_home_page.dart';
 import 'package:dio/dio.dart';
 
 void test() async {
@@ -204,7 +204,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               // test();
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TeacherHomePage()),
+                MaterialPageRoute(builder: (context) => HomeScreen()),
               );
             },
             child: Text('Login'),
