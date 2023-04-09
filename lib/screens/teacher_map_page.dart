@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:teacher_app/view/teacher_view_attendance_page.dart';
+import 'package:teacher_app/screens/teacher_view_attendance_page.dart';
 
 class Temp {
   static double lat = 19.0296;

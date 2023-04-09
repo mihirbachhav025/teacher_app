@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teacher_app/view/timetable.dart';
+import 'package:teacher_app/screens/timetable.dart';
 
 class About extends StatelessWidget {
   const About({Key? key}) : super(key: key);
