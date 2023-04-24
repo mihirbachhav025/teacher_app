@@ -1,10 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:teacher_app/models/lecture.dart';
 import 'package:teacher_app/screens/login_page.dart';
 import 'controllers/bindings/HomeBinding.dart';
 import 'controllers/bindings/LoginBinding.dart';
+import 'controllers/bindings/MapBinding.dart';
 import 'screens/HomeScreen.dart';
+import 'screens/teacher_map_page.dart';
 import 'utils/sharepref.dart';
 import 'firebase_options.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -42,7 +46,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'NextGen Attendance Student',
+      debugShowCheckedModeBanner: false,
+      title: 'AttendancePro',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

@@ -1,123 +1,99 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:teacher_app/screens/teacher_view_attendance_page.dart';
+import 'package:get/get.dart';
+import 'package:logger/logger.dart';
+import 'package:teacher_app/controllers/MapController.dart';
 
-class Temp {
-  static double lat = 19.0296;
-  static double lng = 73.0166;
-}
+import '../models/lecture.dart';
 
-//37.42796133580664
-//-122.085749655962
-//zoom - 14.4746
 class MapSample extends StatefulWidget {
-  const MapSample({Key? key}) : super(key: key);
-
+  final Lecture lecture;
+  const MapSample({Key? key, required this.lecture}) : super(key: key);
   @override
   State<MapSample> createState() => MapSampleState();
 }
 
 class MapSampleState extends State<MapSample> {
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
-
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(Temp.lat, Temp.lng),
-    zoom: 18,
-  );
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(Temp.lat, Temp.lng),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
-
-  static final Marker _marker1 = Marker(
-    markerId: MarkerId('marker1'),
-    infoWindow: InfoWindow(title: 'marker1'),
-    icon: BitmapDescriptor.defaultMarker,
-    position: LatLng(Temp.lat, Temp.lng),
-  );
-
-  static final Circle _circle1 = Circle(
-    circleId: CircleId("1"),
-    center: LatLng(Temp.lat, Temp.lng),
-    radius: 25,
-    fillColor: Colors.redAccent.withOpacity(0.4),
-    strokeColor: Colors.redAccent,
-    strokeWidth: 3,
-  );
+  Logger logger = Logger();
 
   @override
   Widget build(BuildContext context) {
+    final Lecture lecture = widget.lecture;
+    final MapController mapController = Get.put(MapController(lecture));
     return Scaffold(
       appBar: AppBar(
-        title: Text("map"),
+        title: const Text("View Students"),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(20),
-            height: 300,
-            width: 300,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(25)),
-              child: GoogleMap(
-                markers: {_marker1},
-                circles: {_circle1},
-                mapType: MapType.normal,
-                initialCameraPosition: _kGooglePlex,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller.complete(controller);
-                },
+      body: Obx(() {
+        if (mapController.loadingDone.value == false) {
+          return const Center(
+            child: CircularProgressIndicator.adaptive(),
+          );
+        } else {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * .75,
+                child: Scrollbar(
+                    radius: const Radius.circular(25),
+                    thickness: 6,
+                    thumbVisibility: true,
+                    trackVisibility: true,
+                    child: ListView(
+                      children: List.generate(mapController.documentIds.length,
+                          (index) {
+                        bool isPresent = false;
+                        if (mapController.studentPresence
+                            .containsKey(mapController.documentIds[index])) {
+                          isPresent = mapController.studentPresence[
+                              mapController.documentIds[index]]["isThere"];
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: ListTile(
+                            key: ValueKey(index),
+                            trailing: CircleAvatar(
+                              radius: 8,
+                              backgroundColor:
+                                  isPresent ? Colors.green : Colors.red,
+                            ),
+                            title: Text(
+                              ' ${mapController.documentIds[index]}',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        );
+                      }),
+                    )),
               ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(30),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                //alignment: Alignment.centerLeft,
-                fixedSize: Size(200, 30),
-              ),
-              child: Text("Mark Attendance"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ViewAttendance()),
-                );
-              },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-            width: double.infinity,
-            color: Colors.white,
-            child: Text("List of students with distance:"),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height * .30,
-            width: double.infinity,
-            child: ListView.builder(
-                itemCount: 25,
-                padding: const EdgeInsets.all(8),
-                itemBuilder: (context, index) {
-                  return Card(
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(('Student 1')),
-                        ],
-                      ));
-                }),
-          ),
-        ],
-      ),
+              if (!mapController.documentIds.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints.tightFor(
+                      width: MediaQuery.of(context).size.width * .50,
+                      height: MediaQuery.of(context).size.height * .05,
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8))),
+                      child: const Text("Mark Attendance"),
+                      onPressed: () {
+                        mapController.markAttendance();
+                      },
+                    ),
+                  ),
+                ),
+            ],
+          );
+        }
+      }),
     );
   }
 }

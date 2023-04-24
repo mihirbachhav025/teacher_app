@@ -1,19 +1,15 @@
 import 'dart:developer';
-import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
+import 'package:teacher_app/controllers/DetailsController.dart';
 import 'package:teacher_app/screens/teacher_map_page.dart';
-import 'package:teacher_app/screens/timetable.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:teacher_app/screens/about.dart';
-
-import 'package:dio/dio.dart';
 
 import '../controllers/HomeContoller.dart';
 import '../controllers/LoginController.dart';
 import '../models/lecture.dart';
+import '../utils/sharepref.dart';
 
 class HomeScreen extends StatefulWidget {
   //final Future<String> value;
@@ -29,6 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final HomeController _controller = Get.put(HomeController());
+    final DetailsController _detailController = Get.put(DetailsController());
+    String userId = SharedPrefs.getUserId()!;
+    Logger logger = Logger();
     return Scaffold(
       appBar: AppBar(title: const Text('Smart Attendance')),
       body: Column(
@@ -48,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Obx(
             () {
               if (_controller.isLoading.value) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else {
                 List<Lecture> lectures = _controller.lectures;
                 return Expanded(
@@ -59,80 +58,82 @@ class _HomeScreenState extends State<HomeScreen> {
                       return InkWell(
                         splashColor: Colors.pinkAccent,
                         onTap: () {
-                          log("message blahhhh");
+                          Get.to(MapSample(
+                            lecture: lecture,
+                          ));
                         },
                         child: Card(
-                          color: Color.fromARGB(255, 235, 173, 228),
-                          margin: EdgeInsets.all(8),
+                          color: const Color.fromARGB(255, 235, 173, 228),
+                          margin: const EdgeInsets.all(8),
                           elevation: 4,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Padding(
-                            padding: EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   '${lecture.subName}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(
                                   '${lecture.cName}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(
                                   'Room Number: ${lecture.roomNo}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 14,
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(
                                   'Division: ${lecture.division}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 14,
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(
                                   'Academic Year: ${lecture.academicYear}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 14,
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(
                                   'Semester: ${lecture.sem}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 14,
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(
                                   'Day: ${lecture.day}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 14,
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(
                                   'Start Time: ${lecture.startTime}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 14,
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(
                                   'End Time: ${lecture.endTime}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 14,
                                   ),
                                 ),
@@ -158,13 +159,13 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.blue,
               ),
               currentAccountPicture: Image.network(
                   'https://th.bing.com/th?id=ODL.b888a41f9a8eb720963897b5e5430fc1&w=100&h=100&c=12&pcl=faf9f7&o=6&dpr=1.3&pid=13.1'),
-              accountName: Text('Proffesor'),
-              accountEmail: Text('Email'),
+              accountName: Obx(() => Text(_detailController.firstName.value)),
+              accountEmail: Text(userId),
               // accountName: Text(
               //     'Welcome  ${studentDataController.studentData['Firstname']} ${studentDataController.studentData['Lastname']} \n  '),
               // accountEmail: Text(
@@ -173,11 +174,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ListTile(
               title: const Text('View Timetable'),
               onTap: () {
-                // Navigator.pop(context);
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const Timetable()),
-                // );
                 Navigator.pop(context);
               },
             ),

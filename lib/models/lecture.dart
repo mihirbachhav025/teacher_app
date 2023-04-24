@@ -9,6 +9,7 @@ class Lecture {
   final String subName;
   final String cName;
   final String profID;
+  late String path = '';
 
   Lecture({
     required this.roomNo,
